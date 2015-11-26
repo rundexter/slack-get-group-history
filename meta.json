@@ -4,23 +4,55 @@
 {
     //Required. Inputs the module expects.
     "inputs": [
-        //e.g.
-        /*
         {
-            "id": "from",
-            "title":"From"
+            "id": "token",
+            "title":"Authentication token "
+        },
+        {
+            "id": "channel",
+            "title":"Group to fetch history for"
+        },
+        {
+            "id": "latest",
+            "title":"End of time range"
+        },
+        {
+            "id": "oldest",
+            "title":"Start of time range"
+        },
+        {
+            "id": "inclusive",
+            "title":"Include oldest timestamp"
+        },
+        {
+            "id": "count",
+            "title":"Number of messages"
+        },
+        {
+            "id": "unreads",
+            "title":"Include unread_count_display"
         }
-        */
     ],
     //Required. Outputs the module emits.
     "outputs": [
       //e.g.
-      /*
         {
-            "id": "from",
-            "title":"From"
+            "id": "ok",
+            "title":"ok"
+        },
+        {
+            "id": "latest",
+            "title":"latest"
+        },
+        {
+            "id": "has_more",
+            "title":"has_more"
+        },
+        {
+            "id": "messages",
+            "title":"messages"
         }
-      */
     ],
-    "title": "Slack Get Group History" /* Required.A display name for the module */
+    /* Required.A display name for the module */
+    "title": "Slack Get Group History"
 }
