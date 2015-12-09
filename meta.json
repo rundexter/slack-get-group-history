@@ -53,6 +53,7 @@
             "title":"messages"
         }
     ],
+    "icon": "slack",
     /* Required.A display name for the module */
     "title": "Slack Get Group History"
 }
