@@ -1,58 +1,19 @@
-var _ = require('lodash');
-var SlackClient = require('slack-api-client');
+var util = require('./util.js'),
+    _ = require('lodash'),
+    SlackClient = require('slack-node');
 
-var pickResult = {
-    'ok': 'ok',
-    'latest': 'latest',
-    'has_more': 'has_more',
-    'messages': ['user', 'text']
-};
+var pickInputs = {
+        'name': 'name'
+    },
+    pickOutputs = {
+        'ok': 'ok',
+        'latest': 'latest',
+        'has_more': 'has_more',
+        'messages_user': 'messages.user',
+        'messages_text': 'messages.text'
+    };
 
 module.exports = {
-    /**
-     * Run main twitter function.
-     *
-     * @param params
-     * @param callback
-     */
-    slackMain: function (params, callback) {
-        var slack = new SlackClient(params.token);
-
-        // Follow befriended
-        slack.api.groups.history(_.omit(params, 'token'), callback);
-    },
-
-    /**
-     * Return pick result.
-     *
-     * @param output
-     * @returns {*}
-     */
-    pickResult: function (output) {
-        var result = {};
-
-        _.map(_.keys(pickResult), function (val) {
-
-            if (_.has(output, val)) {
-
-                if (_.isArray(pickResult[val]) &&  _.isArray(_.get(output, val))) {
-                    result[val] = _.transform(_.get(output, val), function (accumulator, accumulatorValue) {
-                        var tmpObj = {};
-
-                        _.map(pickResult[val], function (keyInArray) {
-                            tmpObj[keyInArray] = accumulatorValue[keyInArray];
-                        });
-                        accumulator.push(tmpObj);
-                    });
-                } else {
-                    _.set(result, pickResult[val], _.get(output, val));
-                }
-            }
-        });
-
-        return result;
-    },
-
     /**
      * Allows the authenticating users to follow the user specified in the ID parameter.
      *
@@ -60,15 +21,19 @@ module.exports = {
      * @param {AppData} dexter Container for all data used in this workflow.
      */
     run: function(step, dexter) {
+        var inputs = util.pickInputs(step, pickInputs),
+            validateErrors = util.checkValidateErrors(inputs, pickInputs),
+            token = dexter.provider('slack').credentials('access_token'),
+            slack = new SlackClient(token);
 
-        this.slackMain(step.inputs(), function (error, apiResult) {
-            if (error) {
-                // if error - send message
+        if (validateErrors)
+            return this.fail(validateErrors);
+
+        slack.api.groups.history(inputs, function (error, data) {
+            if (error)
                 this.fail(error);
-            }
-            console.log(apiResult);
-            // return befriendedInfo
-            this.complete(this.pickResult(apiResult));
+            else
+                this.complete(util.pickOutputs(data, pickOutputs));
         }.bind(this));
     }
 };
