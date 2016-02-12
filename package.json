@@ -1,12 +1,16 @@
 {
-    "name": "slack-get-group-history",
-    "version": "0.0.1",
-    "description": "",
-    "main": "index.js",
-    "author": "Alexander",
-    "license": "ISC",
-    "private": true,
-    "dependencies": {
-        "lodash": "^3.9.3"
-    }
+   "name": "slack-get-group-history",
+   "version": "0.0.1",
+   "description": "This method returns a portion of messages/events from the specified private group",
+   "main": "index.js",
+   "author": "Run Dexter, Inc",
+   "license": "MIT",
+   "private": true,
+   "dependencies": {
+      "lodash": "^3.9.3"
+   },
+   "repository": {
+      "type": "git",
+      "url": "https://github.com/rundexter/slack-get-group-history"
+   }
 }
